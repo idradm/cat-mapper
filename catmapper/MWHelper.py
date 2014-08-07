@@ -25,7 +25,7 @@ class MWHelper(object):
         return result['query']['allcategories']
 
 """
-mw = MWHelper()
+mw = MWHelper() 
 results = mw.get_categories(3125)
 for res in results:
     print res
