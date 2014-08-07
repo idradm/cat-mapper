@@ -17,10 +17,6 @@
                 r.send(serialize(document.forms[0]));
                 return false;
             };
-
-            document.getElementById('filterInput').onclick = function(data) {
-                console.info(data);
-            }
         };
     </script>
     <meta charset=utf-8 />
@@ -38,12 +34,15 @@
         {% for category in categories %}
         <li>
           <input type="checkbox" class="selected_category" name="selected_category" value="{{category}}" />
-          <h3 class="name">{{category}}</h3>
+          <a href="#"><h3 class="name">{{category}}</h3></a>
         </li>
         {% endfor %}
       </ul>
       <ul class="pagination"></ul>
     </div>
+</div>
+
+<div id="pages_list">
 </div>
 
 <script type="text/javascript">
@@ -54,12 +53,21 @@
     };
 
     var userList = new List('categories', options);
+
+    $('#category_picker .list li').on('click', function() {
+        var r = new XMLHttpRequest();
+        r.open('GET', '/{{wid}}/p/' + $(this).find('input').val());
+        r.onreadystatechange = function () {
+          if (r.readyState != 4 || r.status != 200) return;
+          $('#pages_list').html(r.responseText);
+        };
+        r.send();
+    });
 </script>
 
 
 <form action="" method="post">
     {% csrf_token %}
-    <input id="filterInput" type="text" value="">
     <input id="btnSubmit" type="submit" value="Submit"/>
 </form>
 

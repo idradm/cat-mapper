@@ -24,6 +24,18 @@ class MWHelper(object):
 
         return result['query']['allcategories']
 
+    def get_pages(self, wiki_id, category):
+        self.mw_client.set_wiki_id(wiki_id)
+        query = {
+            'action': 'query',
+            'list': 'categorymembers',
+            'cmlimit': 5000,
+            'cmtitle': 'Category:{0}'.format(category),
+            'cmnamespace': 0
+        }
+        result = self.mw_client.queryList(0, query, True)
+        return result['query']['categorymembers']
+
 """
 mw = MWHelper() 
 results = mw.get_categories(3125)

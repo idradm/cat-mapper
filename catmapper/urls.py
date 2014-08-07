@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
     # url(r'^', 'map.views.main', name='main'),
     url(r'^(?P<wiki_id>\d+)/save/?', 'map.views.save', name='save'),
+    url(r'^(?P<wiki_id>\d+)/p/(?P<category>.*)/?', 'map.views.pages', name='pages'),
     url(r'^(?P<wiki_id>\d+)/?', 'map.views.main', name='main'),
 
 

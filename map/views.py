@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from catmapper import MWHelper
 
+
 # Create your views here.
 def main(request, wiki_id):
     mw_helper = MWHelper.MWHelper()
@@ -14,6 +15,13 @@ def main(request, wiki_id):
 
     context = {'categories': cats, 'wid': wiki_id}
     return render(request, 'index.html', context)
+
+
+def pages(request, wiki_id, category):
+    mw_helper = MWHelper.MWHelper()
+    pages = mw_helper.get_pages(wiki_id, category)
+    context = {'pages': pages}
+    return render(request, 'pages.html', context)
 
 
 def save(request, wiki_id):
