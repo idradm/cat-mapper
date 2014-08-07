@@ -1,3 +1,5 @@
+from map.models import Type, Group, Category, CategoryTypeMapping
+
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -10,5 +12,11 @@ def main(request, wiki_id):
 
 
 def save(request, wiki_id):
-    print(request.POST)
+    # create new group id
+    g = Group(wiki_id=wiki_id)
+    g.save()
+    for category in request.POST.get('categories'):
+        Category(group_id=g.id, name=category, wiki_id=wiki_id).save()
+    CategoryTypeMapping(group_id=g.id, type=Type.objects.get(name=request.POST.get('type'))).save()
+
     return HttpResponse(1, content_type="application/json")
