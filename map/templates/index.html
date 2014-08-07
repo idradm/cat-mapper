@@ -1,9 +1,32 @@
-<!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <script type="text/javascript" src="http://form-serialize.googlecode.com/svn/trunk/serialize-0.2.min.js"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            document.getElementById('btnSubmit').onclick = function() {
+                var r = new XMLHttpRequest();
+                r.open('POST', '/{{wid}}/save', true);
+                r.setRequestHeader("X-CSRFToken", document.forms[0]['csrfmiddlewaretoken'].value);
+                r.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                r.send(serialize(document.forms[0]));
+                return false;
+            };
+
+            document.getElementById('filterInput').onclick = function(data) {
+                console.info(data);
+            }
+        };
+    </script>
 </head>
 <body>
-asdfd
+<form action="" method="post">
+    {% csrf_token %}
+    <input id="filterInput" type="text" value="">
+    {% for category in categories %}
+    <input type="checkbox" name="categories" id="cat_{{category}}" value="{{ category }}"/>
+    <label for="cat_{{category}}">{{category}}</label>
+    {% endfor %}
+    <input id="btnSubmit" type="submit" value="Submit"/>
+</form>
 </body>
 </html>
