@@ -2,11 +2,16 @@ from map.models import Type, Group, Category, CategoryTypeMapping
 
 from django.http import HttpResponse
 from django.shortcuts import render
-
+from catmapper import MWHelper
 
 # Create your views here.
 def main(request, wiki_id):
-    cats = ['cat1', 'cat2', 'cat3']
+    mw_helper = MWHelper.MWHelper()
+    cat_list = mw_helper.get_categories(wiki_id)
+    cats = []
+    for item in cat_list:
+        cats.append(item.get('*'))
+
     context = {'categories': cats, 'wid': wiki_id}
     return render(request, 'index.html', context)
 

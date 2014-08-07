@@ -1,6 +1,12 @@
 <html>
 <head>
+    {% load staticfiles %}
+    <link href="{% static "style.css" %}" rel="stylesheet" type="text/css" media="screen" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="http://form-serialize.googlecode.com/svn/trunk/serialize-0.2.min.js"></script>
+    <script type="text/javascript" src="http://listjs.com/no-cdn/list.js"></script>
+    <script src="http://listjs.com/no-cdn/list.fuzzysearch.js"></script>
+    <script src="http://listjs.com/no-cdn/list.pagination.js"></script>
     <script type="text/javascript">
         window.onload = function () {
             document.getElementById('btnSubmit').onclick = function() {
@@ -17,16 +23,46 @@
             }
         };
     </script>
+    <meta charset=utf-8 />
 </head>
+
 <body>
+<div id="category_picker">
+    <div id="categories">
+      <input class="search" placeholder="Search" />
+      <button class="sort" data-sort="name">
+        Sort by name
+      </button>
+
+      <ul class="list">
+        {% for category in categories %}
+        <li>
+          <input type="checkbox" class="selected_category" name="selected_category" value="{{category}}" />
+          <h3 class="name">{{category}}</h3>
+        </li>
+        {% endfor %}
+      </ul>
+      <ul class="pagination"></ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var options = {
+      valueNames: [ 'name' ],
+      page: 200,
+      plugins: [ ListPagination({}) ]
+    };
+
+    var userList = new List('categories', options);
+</script>
+
+
 <form action="" method="post">
     {% csrf_token %}
     <input id="filterInput" type="text" value="">
-    {% for category in categories %}
-    <input type="checkbox" name="categories" id="cat_{{category}}" value="{{ category }}"/>
-    <label for="cat_{{category}}">{{category}}</label>
-    {% endfor %}
     <input id="btnSubmit" type="submit" value="Submit"/>
 </form>
+
+
 </body>
 </html>
