@@ -11,6 +11,8 @@ urlpatterns = patterns('',
     url(r'^(?P<wiki_id>\d+)/save/?', 'map.views.save', name='save'),
     url(r'^(?P<wiki_id>\d+)/p/(?P<category>.*)/?', 'map.views.pages', name='pages'),
     url(r'^(?P<wiki_id>\d+)/d/(?P<page_id>\d+)/?', 'map.views.details', name='details'),
+    url(r'^(?P<wiki_id>\d+)/g/(?P<group_id>\d+)/?', 'map.views.group_details', name='group_details'),
+    url(r'^(?P<wiki_id>\d+)/g/?', 'map.views.groups', name='groups'),
     url(r'^(?P<wiki_id>\d+)/?', 'map.views.main', name='main'),
 
 

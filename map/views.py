@@ -1,3 +1,4 @@
+import json
 from map.models import Type, Group, Category, CategoryTypeMapping
 from catmapper import MWHelper
 
@@ -12,8 +13,7 @@ def main(request, wiki_id):
     cats = []
     for item in cat_list:
         cats.append(item.get('*'))
-
-    context = {'categories': cats, 'wid': wiki_id}
+    context = {'categories': cats, 'types': Type.objects.all(), 'wid': wiki_id}
     return render(request, 'index.html', context)
 
 
@@ -42,3 +42,19 @@ def save(request, wiki_id):
     CategoryTypeMapping(group_id=g.id, type=Type.objects.get(name=request.POST.get('type'))).save()
 
     return HttpResponse(1, content_type="application/json")
+
+
+def groups(request, wiki_id):
+    res = Group.objects.filter(wiki_id=wiki_id)
+    output = json.dumps([{'id': g.id} for g in res]) if res else 0
+    return HttpResponse(output, content_type="application/json")
+
+
+def group_details(request, wiki_id, group_id):
+    mw_helper = MWHelper.MWHelper()
+    res = Category.objects.filter(group_id=group_id, wiki_id=wiki_id)
+    map = CategoryTypeMapping.objects.get(group_id=group_id)
+    cats = [cat.name for cat in res]
+    articles = mw_helper.get_articles_intersection(wiki_id, cats)
+    output = json.dumps({'categories': cats, 'articles': articles, 'article_type': map.type.name}) if res else 0
+    return HttpResponse(output, content_type="application/json")
