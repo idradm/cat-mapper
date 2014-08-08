@@ -50,7 +50,7 @@ class MWHelper(object):
     def get_articles_intersection(self, wiki_id, categories):
         c = self._get_solr_connection()
         res = c.select('categories_mv_en:({0})'.format(' AND '.join(categories)),
-                       fq='ns:0 AND wid:{0}'.format(wiki_id), fl='url, id')
+                       fq='ns:0 AND wid:{0}'.format(wiki_id), fl='url, id', rows=1000)
         return res.get('response').get('docs')
 
     def _get_solr_connection(self):

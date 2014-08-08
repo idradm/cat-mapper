@@ -34,10 +34,9 @@ def details(request, wiki_id, page_id):
 
 def save(request, wiki_id):
     # create new group id
-    print(request.POST)
     g = Group(wiki_id=wiki_id)
     g.save()
-    for category in request.POST.get('categories'):
+    for category in request.POST.getlist('categories'):
         Category(group_id=g.id, name=category, wiki_id=wiki_id).save()
     CategoryTypeMapping(group_id=g.id, type=Type.objects.get(name=request.POST.get('type'))).save()
 
