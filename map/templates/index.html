@@ -23,6 +23,8 @@
 </head>
 
 <body>
+<form action="" method="post">
+{% csrf_token %}
 <div id="category_picker">
     <div id="categories">
       <input class="search" placeholder="Search" />
@@ -30,10 +32,10 @@
         Sort by name
       </button>
 
-      <ul class="list">
+      <ul class="list height-500px">
         {% for category in categories %}
         <li>
-          <input type="checkbox" class="selected_category" name="selected_category" value="{{category}}" />
+          <input type="checkbox" class="selected_category" name="categories" value="{{category}}" />
           <a href="#"><h3 class="name">{{category}}</h3></a>
         </li>
         {% endfor %}
@@ -41,9 +43,15 @@
       <ul class="pagination"></ul>
     </div>
 </div>
+<input id="btnSubmit" type="submit" value="Submit"/>
+</form>
 
-<div id="pages_list">
+<div id="selected_categories">
+    <ul class="list height-250px">
+    </ul>
 </div>
+<div id="pages_list" class="height-250px"></div>
+<div id="details"></div>
 
 <script type="text/javascript">
     var options = {
@@ -53,24 +61,38 @@
     };
 
     var userList = new List('categories', options);
+    var selectedList = new List('selected_categories', {
+        valueNames: [ 'name' ],
+        item: '<li><h3 class="name"></h3></li>'
+    });
 
-    $('#category_picker .list li').on('click', function() {
+    $('#category_picker').on('click', '.list li h3', function() {
         var r = new XMLHttpRequest();
-        r.open('GET', '/{{wid}}/p/' + $(this).find('input').val());
+        r.open('GET', '/{{wid}}/p/' + $(this).text());
         r.onreadystatechange = function () {
           if (r.readyState != 4 || r.status != 200) return;
           $('#pages_list').html(r.responseText);
         };
         r.send();
     });
+
+    $('#category_picker').on('change', '.list input', function() {
+        if($(this).is(':checked')) {
+            selectedList.add({name: $(this).val()});
+        } else {
+            selectedList.remove('name', $(this).val());
+        }
+    });
+
+    $('#pages_list').on('click', 'li a', function() {
+        var r = new XMLHttpRequest();
+        r.open('GET', '/{{wid}}/d/' + $(this).data().id);
+        r.onreadystatechange = function () {
+          if (r.readyState != 4 || r.status != 200) return;
+          $('#details').html(r.responseText);
+        };
+        r.send();
+    });
 </script>
-
-
-<form action="" method="post">
-    {% csrf_token %}
-    <input id="btnSubmit" type="submit" value="Submit"/>
-</form>
-
-
 </body>
 </html>

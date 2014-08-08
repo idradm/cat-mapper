@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
 {% for page in pages %}
 <li>
-    {{ page.title }}
+    <a href="#" class="page" data-id="{{ page.pageid }}">{{ page.title }}</a>
 </li>
 {% endfor %}
-</body>
-</html>

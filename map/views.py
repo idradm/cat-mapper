@@ -1,8 +1,8 @@
 from map.models import Type, Group, Category, CategoryTypeMapping
+from catmapper import MWHelper
 
 from django.http import HttpResponse
 from django.shortcuts import render
-from catmapper import MWHelper
 
 
 # Create your views here.
@@ -24,8 +24,17 @@ def pages(request, wiki_id, category):
     return render(request, 'pages.html', context)
 
 
+def details(request, wiki_id, page_id):
+    mw_helper = MWHelper.MWHelper()
+    details = mw_helper.get_details(wiki_id, page_id)
+    context = {'img': details.get('items').get(str(page_id)).get('thumbnail', ''),
+               'snippet': details.get('items').get(str(page_id)).get('abstract', '')}
+    return render(request, 'details.html', context)
+
+
 def save(request, wiki_id):
     # create new group id
+    print(request.POST)
     g = Group(wiki_id=wiki_id)
     g.save()
     for category in request.POST.get('categories'):

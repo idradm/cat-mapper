@@ -1,4 +1,4 @@
-import solr
+import requests
 import MediaWikiClient
 
 
@@ -35,6 +35,15 @@ class MWHelper(object):
         }
         result = self.mw_client.queryList(0, query, True)
         return result['query']['categorymembers']
+
+    def get_details(self, wiki_id, page_id):
+        self.mw_client.set_wiki_id(wiki_id)
+        domain = self.mw_client.get_domain()
+        url = 'http://{0}/api/v1/Articles/Details?ids={1}&abstract=500'.format(domain, page_id)
+        r = requests.get(url)
+        if r.status_code == 200:
+            return r.json()
+        return False
 
 """
 mw = MWHelper() 
