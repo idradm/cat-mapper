@@ -23,8 +23,6 @@
 </head>
 
 <body>
-<form action="" method="post">
-{% csrf_token %}
 <div id="category_picker">
     <div id="categories">
       <input class="search" placeholder="Search" />
@@ -43,13 +41,16 @@
       <ul class="pagination"></ul>
     </div>
 </div>
-<input id="btnSubmit" type="submit" value="Submit"/>
-</form>
 
-<div id="selected_categories">
-    <ul class="list height-250px">
-    </ul>
-</div>
+
+<form action="" method="post">
+    {% csrf_token %}
+    <div id="selected_categories">
+        <ul class="list height-250px">
+        </ul>
+    </div>
+    <input id="btnSubmit" type="submit" value="Submit"/>
+</form>
 <div id="pages_list" class="height-250px"></div>
 <div id="details"></div>
 
@@ -61,9 +62,10 @@
     };
 
     var userList = new List('categories', options);
+
     var selectedList = new List('selected_categories', {
         valueNames: [ 'name' ],
-        item: '<li><h3 class="name"></h3></li>'
+        item: '<li><textarea class="name" readonly="readonly" name="categories"></textarea></li>'
     });
 
     $('#category_picker').on('click', '.list li h3', function() {

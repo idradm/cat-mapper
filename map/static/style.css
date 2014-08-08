@@ -5,6 +5,8 @@ input.selected_category { float: left; }
 .pagination li { display: inline; background:lightgray; border-radius: 30px; color:black; font-weight: bold; margin-right: 10px; padding:10px;  }
 .pagination li a { text-decoration: none; color:black; }
 
+#selected_categories textarea { width:100%; background: none; border:none; font-size:16px; }
+
 .height-500px {
     height: 500px;
 }

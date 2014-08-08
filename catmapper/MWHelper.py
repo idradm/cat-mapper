@@ -46,7 +46,7 @@ class MWHelper(object):
         return False
 
 """
-mw = MWHelper() 
+mw = MWHelper()
 results = mw.get_categories(3125)
 for res in results:
     print res
