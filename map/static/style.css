@@ -1,11 +1,13 @@
 body { background-color: white; }
 input.selected_category { float: left; }
-#category_picker  { float:left; width:40%; }
+#category_picker  { float:left; width:33%; padding:10px; }
 .pagination { padding: 0; }
 .pagination li { display: inline; background:lightgray; border-radius: 30px; color:black; font-weight: bold; margin-right: 10px; padding:10px;  }
 .pagination li a { text-decoration: none; color:black; }
 
 #selected_categories textarea { width:100%; background: none; border:none; font-size:16px; }
+#selected_container { width:33%; float:left; padding:10px; }
+#type_container { float:left; width:50%; padding:10px; }
 
 .height-500px {
     height: 500px;

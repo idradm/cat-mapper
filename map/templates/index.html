@@ -24,6 +24,7 @@
 
 <body>
 <div id="category_picker">
+    <h2>Categories from {{ domain }}</h2>
     <div id="categories">
       <input class="search" placeholder="Search" />
       <button class="sort" data-sort="name">
@@ -41,20 +42,24 @@
       <ul class="pagination"></ul>
     </div>
 </div>
-
-
 <form action="" method="post">
-    {% csrf_token %}
-    <div id="selected_categories">
-        <ul class="list height-250px">
-        </ul>
+    <div id="selected_container">
+        <h2>Selected categories</h2>
+            {% csrf_token %}
+            <div id="selected_categories">
+                <ul class="list height-250px">
+                </ul>
+            </div>
     </div>
-    <input id="btnSubmit" type="submit" value="Submit"/>
-    <select name="type">
-    {% for type in types %}
-        <option value="{{ type.name }}">{{type.name}}</option>
-    {% endfor %}
-    </select>
+    <div id="type_container">
+        <h2>Articles that contain all selected categories are</h2>
+        Type: <select name="type">
+            {% for type in types %}
+                <option value="{{ type.name }}">{{ type.name }}</option>
+            {% endfor %}
+        </select>
+        <p><input id="btnSubmit" type="submit" value="Submit"/></p>
+    </div>
 </form>
 <div id="pages_list" class="height-250px"></div>
 <div id="details"></div>

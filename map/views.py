@@ -1,6 +1,6 @@
 import json
 from map.models import Type, Group, Category, CategoryTypeMapping
-from catmapper import MWHelper
+from catmapper import MWHelper, MediaWikiClient
 
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -8,12 +8,15 @@ from django.shortcuts import render
 
 # Create your views here.
 def main(request, wiki_id):
-    mw_helper = MWHelper.MWHelper()
+    mw_api_client = MediaWikiClient.MediaWikiClient()
+    mw_api_client.set_wiki_id(wiki_id)
+    mw_helper = MWHelper.MWHelper(mw_api_client)
     cat_list = mw_helper.get_categories(wiki_id)
     cats = []
     for item in cat_list:
         cats.append(item.get('*'))
-    context = {'categories': cats, 'types': Type.objects.all(), 'wid': wiki_id}
+    domain = mw_api_client.get_domain()
+    context = {'categories': cats, 'types': Type.objects.all(), 'wid': wiki_id, 'domain': domain}
     return render(request, 'index.html', context)
 
 
