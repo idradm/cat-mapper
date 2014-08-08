@@ -8,6 +8,13 @@
     <script src="http://listjs.com/no-cdn/list.fuzzysearch.js"></script>
     <script src="http://listjs.com/no-cdn/list.pagination.js"></script>
     <script type="text/javascript">
+        function clearForm() {
+            for (i in selectedList.items) {
+                selectedList.remove('name', selectedList.items[i].values().name);
+            }
+            $('input.selected_category').attr("checked", false);
+            alert('mapping saved!');
+        }
         window.onload = function () {
             document.getElementById('btnSubmit').onclick = function() {
                 var r = new XMLHttpRequest();
@@ -15,6 +22,7 @@
                 r.setRequestHeader("X-CSRFToken", document.forms[0]['csrfmiddlewaretoken'].value);
                 r.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                 r.send(serialize(document.forms[0]));
+                clearForm();
                 return false;
             };
         };
