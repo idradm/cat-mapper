@@ -50,6 +50,11 @@
         </ul>
     </div>
     <input id="btnSubmit" type="submit" value="Submit"/>
+    <select name="type">
+    {% for type in types %}
+        <option value="{{ type.name }}">{{type.name}}</option>
+    {% endfor %}
+    </select>
 </form>
 <div id="pages_list" class="height-250px"></div>
 <div id="details"></div>
