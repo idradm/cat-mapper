@@ -17,10 +17,10 @@ def main(request, wiki_id):
     return render(request, 'index.html', context)
 
 
-def pages(request, wiki_id, category):
+def pages(request, wiki_id, categories):
     mw_helper = MWHelper.MWHelper()
-    pages = mw_helper.get_pages(wiki_id, category)
-    context = {'pages': pages}
+    articles = mw_helper.get_articles_intersection(wiki_id, categories.split(','))
+    context = {'pages': articles}
     return render(request, 'pages.html', context)
 
 

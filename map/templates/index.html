@@ -73,14 +73,8 @@
         item: '<li><textarea class="name" readonly="readonly" name="categories"></textarea></li>'
     });
 
-    $('#category_picker').on('click', '.list li h3', function() {
-        var r = new XMLHttpRequest();
-        r.open('GET', '/{{wid}}/p/' + $(this).text());
-        r.onreadystatechange = function () {
-          if (r.readyState != 4 || r.status != 200) return;
-          $('#pages_list').html(r.responseText);
-        };
-        r.send();
+    $('#category_picker').on('click', '.list li a', function() {
+        $(this).parent().find('input').trigger('click');
     });
 
     $('#category_picker').on('change', '.list input', function() {
@@ -88,6 +82,21 @@
             selectedList.add({name: $(this).val()});
         } else {
             selectedList.remove('name', $(this).val());
+        }
+        cats = [];
+        for (i in selectedList.items) {
+            cats.push(selectedList.items[i].values().name);
+        }
+        if (!cats.length) {
+            $('#pages_list').html('');
+        } else {
+            var r = new XMLHttpRequest();
+            r.open('GET', '/{{wid}}/p/' + cats.join());
+            r.onreadystatechange = function () {
+              if (r.readyState != 4 || r.status != 200) return;
+              $('#pages_list').html(r.responseText);
+            };
+            r.send();
         }
     });
 
