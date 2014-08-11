@@ -1,5 +1,5 @@
 {% for page in pages %}
 <li>
-    <a href="#" class="page" data-id="{{ page.pageid }}">{{ page.url }}</a>
+    <a href="http://{{ domain }}/wiki/{{ page.title }}" class="page" data-id="{{ page.pageid }}">{{ page.title }}</a>
 </li>
 {% endfor %}

@@ -29,18 +29,16 @@ class MediaWikiClient(object):
             return True if r else False
         return False
 
-    def queryList(self, article_id, properties=None, auto_continue=True, query_continue=None):
-        if query_continue is not None:
-            properties['acfrom'] = query_continue
-
-        list_key = properties['list']
-
+    def queryList(self, article_id, properties=None):
+        list_key = properties.get('list')
         results = self.query(article_id, properties)
-        if 'query-continue' in results:
-            next_query = self.queryList(article_id, properties, auto_continue, results['query-continue'][list_key]['acfrom'])
-            results['query'][list_key] += next_query['query'][list_key]
-
-        return results
+        result = results.get('query').get(list_key)
+        while 'query-continue' in results:
+            continue_key, continue_val = results['query-continue'][list_key].items()[0]
+            properties[continue_key] = continue_val
+            results = self.query(article_id, properties)
+            result += results.get('query').get(list_key)
+        return result
 
     def query(self, article_id, properties=None):
         if not properties: properties = {}

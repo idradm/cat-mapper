@@ -23,7 +23,7 @@ def main(request, wiki_id):
 def pages(request, wiki_id, categories):
     mw_helper = MWHelper.MWHelper()
     articles = mw_helper.get_articles_intersection(wiki_id, categories.split(','))
-    context = {'pages': articles}
+    context = {'pages': articles, 'domain': mw_helper.get_domain(wiki_id)}
     return render(request, 'pages.html', context)
 
 

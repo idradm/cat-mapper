@@ -22,9 +22,9 @@ class MWHelper(object):
             'acmin': 1
         }
 
-        result = self.mw_client.queryList(0, query, True)
+        result = self.mw_client.queryList(0, query)
 
-        return result['query']['allcategories']
+        return result
 
     def get_pages(self, wiki_id, category):
         self.mw_client.set_wiki_id(wiki_id)
@@ -35,8 +35,8 @@ class MWHelper(object):
             'cmtitle': 'Category:{0}'.format(category),
             'cmnamespace': 0
         }
-        result = self.mw_client.queryList(0, query, True)
-        return result['query']['categorymembers']
+        result = self.mw_client.queryList(0, query)
+        return result
 
     def get_details(self, wiki_id, page_id):
         self.mw_client.set_wiki_id(wiki_id)
@@ -48,19 +48,18 @@ class MWHelper(object):
         return False
 
     def get_articles_intersection(self, wiki_id, categories):
-        c = self._get_solr_connection()
-        res = c.select('categories_mv_en:("{0}")'.format('" AND "'.join(categories)),
-                       fq='ns:0 AND wid:{0}'.format(wiki_id), fl='url, wid, pageid', rows=1000)
-        return res.get('response').get('docs')
+        out = None
+        for category in categories:
+            articles = self.get_pages(wiki_id, category)
+            if not articles:
+                return []
+            if out is None:
+                out = articles
+            else:
+                ids = set(item['pageid'] for item in out)
+                out = [item for item in articles if item['pageid'] in ids]
+        return out
 
-    def _get_solr_connection(self):
-        if not self.solr_conn:
-            self.solr_conn = solr.SolrConnection('http://search-s11:8983/solr')
-        return self.solr_conn
-
-"""
-mw = MWHelper()
-results = mw.get_categories(3125)
-for res in results:
-    print res
-"""
+    def get_domain(self, wiki_id):
+        self.mw_client.set_wiki_id(wiki_id)
+        return self.mw_client.get_domain()
